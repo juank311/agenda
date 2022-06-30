@@ -1,25 +1,43 @@
 <?php require 'conexion_pgs.php'?>
 <?php include("includes/header.php") ?>
 <?php
+    if (isset($_GET['id'])) {
 
+        $id_categories = $_GET['id']; 
 
+        $query_search = "SELECT * FROM agenda_s.categories WHERE id = ?";
+        $stmt_search=$pdo->prepare($query_search);
+        $stmt_search->execute([$id_categories]);
+        $result_search = $stmt_search->fetch(PDO::FETCH_OBJ);
+    } 
+
+    
 
 //echo $id_caterogia;
-
-if (isset($_POST['editarCategoria']) ) {
-    $id_categories = $_GET['id'];
+if (isset($_POST['editarCategoria'])) { 
     $categories_name = $_POST['categories_name'];
+    $id_categories = $_GET['id']; 
 
-    if (!empty($categories_name)) {
+    /* $query_search = "SELECT * FROM agenda_s.categories WHERE id = ?";
+    $stmt_search=$pdo->prepare($query_search);
+    $stmt_search->execute([$id_categories]);
+    $result_search = $stmt_search->fetch(PDO::FETCH_OBJ);
+
+    echo $result_search->categories; */
+    
+    if ( !isset($categories_name) || trim($categories_name) == "" || trim($categories_name) == NULL) {
+        $error = "Nombre NO puede estar vacio";
+    }   else {
         $query_update = "UPDATE agenda_s.categories SET categories = ? WHERE id = ? ";
         $stmt_update = $pdo->prepare($query_update);
         $stmt_update->execute([$categories_name, $id_categories]);
-    } if ($stmt_update) {
-            $mensaje = "Categoria ". $categories_name. " editada exitosamente!!";  
-    }else{
-        $error = "La Categoria ".$categories_name. " No se puedo editar, ya que está vacia";
-    } 
+        if ($stmt_update) {
+            $mensaje = "Categoria ". $categories_name. " editada exitosamente!!"; 
+        }
+    }
 }
+ 
+
 
 ?>
 
@@ -28,7 +46,7 @@ if (isset($_POST['editarCategoria']) ) {
             <h3>Editar Categoría</h3>
         </div>            
     </div>
-    <?php if (isset($mensaje)) : ?>
+                    <?php if (isset($mensaje)) : ?>
                     <!-- mensaje --> 
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong><?php echo $mensaje;?></strong> 
@@ -44,8 +62,11 @@ if (isset($_POST['editarCategoria']) ) {
         <div class="col-sm-6 offset-3">
         <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
             <div class="mb-3">
+                <label for="id_categories" class="form-label">Códido ID:</label>
+                <input type="text" class="form-control" name="id_categories" id="id_categories"  value=<?php echo $result_search->id;?> readonly>
+                <br>
                 <label for="categories_name" class="form-label">Nombre:</label>
-                <input type="text" class="form-control" name="categories_name" id="categories_name" placeholder="Ingresa el nuevo nombre">               
+                <input type="text" class="form-control" name="categories_name" id="categories_name" placeholder="Ingresa el nuevo nombre" value=<?php echo $result_search->categories;?>>               
             </div>          
 
             <button type="submit" name="editarCategoria" class="btn btn-primary w-100">Editar Categoría</button>

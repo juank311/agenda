@@ -1,6 +1,7 @@
-<?php require 'conexion_pgs.php'?>
 <?php include("includes/header.php") ?>
 <?php
+
+    //Consulta para mostrar como placeholder editable
     if (isset($_GET['id'])) {
 
         $id_categories = $_GET['id']; 
@@ -9,22 +10,14 @@
         $stmt_search=$pdo->prepare($query_search);
         $stmt_search->execute([$id_categories]);
         $result_search = $stmt_search->fetch(PDO::FETCH_OBJ);
+
+        echo $result_search->categories;
     } 
-
-    
-
-//echo $id_caterogia;
+    //Edicion del nombre de la categoria por un nuevo nombre entregado por el usuario
 if (isset($_POST['editarCategoria'])) { 
     $categories_name = $_POST['categories_name'];
     $id_categories = $_GET['id']; 
-
-    /* $query_search = "SELECT * FROM agenda_s.categories WHERE id = ?";
-    $stmt_search=$pdo->prepare($query_search);
-    $stmt_search->execute([$id_categories]);
-    $result_search = $stmt_search->fetch(PDO::FETCH_OBJ);
-
-    echo $result_search->categories; */
-    
+     
     if ( !isset($categories_name) || trim($categories_name) == "" || trim($categories_name) == NULL) {
         $error = "Nombre NO puede estar vacio";
     }   else {
@@ -33,12 +26,11 @@ if (isset($_POST['editarCategoria'])) {
         $stmt_update->execute([$categories_name, $id_categories]);
         if ($stmt_update) {
             $mensaje = "Categoria ". $categories_name. " editada exitosamente!!"; 
+            header('Location: editar_codigo.php?mensaje='.urldecode($mensaje).'&id='.$id_categories);
         }
     }
 }
  
-
-
 ?>
 
     <div class="row">
@@ -66,10 +58,10 @@ if (isset($_POST['editarCategoria'])) {
                 <input type="text" class="form-control" name="id_categories" id="id_categories"  value=<?php echo $result_search->id;?> readonly>
                 <br>
                 <label for="categories_name" class="form-label">Nombre:</label>
-                <input type="text" class="form-control" name="categories_name" id="categories_name" placeholder="Ingresa el nuevo nombre" value=<?php echo $result_search->categories;?>>               
+                <input type="text" class="form-control" name="categories_name" id="categories_name" value=<?php echo $result_search->categories;?>>             
             </div>          
 
-            <button type="submit" name="editarCategoria" class="btn btn-primary w-100">Editar Categoría</button>
+            <button type="submit" name="editarCategoria" class="btn btn-primary w-100"> <i class="bi bi-pencil-fill"></i> Editar Categoría</button>
             </form>
         </div>
     </div>

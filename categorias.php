@@ -24,7 +24,7 @@ $categories_table = $stmt_search->fetchAll(PDO::FETCH_OBJ);
     </div>    
 </div>
 <div class="row mt-2 caja">
-<?php if (isset($_GET['mensaje'])) : ?>
+                    <?php if (isset($_GET['mensaje'])) : ?>
                     <!-- mensaje --> 
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong><?php echo $_GET['mensaje'];?></strong> 

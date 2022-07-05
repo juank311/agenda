@@ -19,13 +19,13 @@ $contacts_table = $stmt_search->fetchAll(PDO::FETCH_OBJ);
 */
 
 //esta es la consulta
-$query_search = "SELECT *
+$query_search = "SELECT cat.id AS IDP_categories, cat.categories, con.id AS IDP_contacts, con.name, con.last_name, con.phone, con.email, con.id_categories
 FROM agenda_s.contacts con
 INNER JOIN agenda_s.categories cat
 ON con.id_categories = cat.id;";
 $stmt_search = $pdo->query($query_search);
 $contacts_table = $stmt_search->fetchAll(PDO::FETCH_OBJ);
-
+var_dump($contacts_table);
 ?>
 
 
@@ -53,16 +53,18 @@ $contacts_table = $stmt_search->fetchAll(PDO::FETCH_OBJ);
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $contador = 0; ?>
                 <?php  foreach ($contacts_table as $value) : ?>
+                    <?php $contador++; ?>
                     <tr>
-                        <td><?php echo $value->id; ?></td>
+                        <td><?php echo $contador; ?></td>
                         <td><?php echo $value->name; ?></td>
                         <td><?php echo $value->last_name; ?></td>
                         <td><?php echo $value->phone; ?></td>
                         <td><?php echo $value->email; ?></td>
                         <td><?php echo $value->categories; ?></td>
                         <td>
-                            <a href="editar_contacto.php" class="btn btn-warning"><i class="bi bi-pencil-fill"></i> Editar</a>
+                            <a href="editar_contacto.php?idp_contacts=<?php echo $value->idp_contacts;?>&categories=<?php echo $value->categories?>&id_categories=<?php echo $value->id_categories?>" class="btn btn-warning"><i class="bi bi-pencil-fill"></i>Editar</a>
                             <a href="borrar_contacto.php" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i> Borrar</a>
                         </td>
                     </tr>

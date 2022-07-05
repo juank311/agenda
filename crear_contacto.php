@@ -20,7 +20,8 @@ if (isset($_POST['crearContacto'])) {
     if (!isset($name_contacts) || trim($name_contacts == null) || trim($name_contacts == "") ||
         !isset($last_name_contacts) || trim($last_name_contacts == null) || trim($last_name_contacts == "") ||
         !isset($phone_contacts) || trim($phone_contacts == null) || trim($phone_contacts == "") ||
-        !isset($email_contacts) || trim($email_contacts == null) || trim($email_contacts == "")) {
+        !isset($email_contacts) || trim($email_contacts == null) || trim($email_contacts == "") ||
+        !isset($categories_id) || trim($categories_id == null) || trim($categories_id == "")) {
         $error = "Existe un campo vacio";
     } else {//Consulta insert para agregar nuevo contacto a la base de datos. 
         $query_insert = "INSERT INTO agenda_s.contacts(name, last_name, phone, email, id_categories)VALUES(?, ?, ?, ?, ?)";
@@ -28,7 +29,7 @@ if (isset($_POST['crearContacto'])) {
         $insert = $stmt_insert->execute([$name_contacts, $last_name_contacts, $phone_contacts, $email_contacts, $categories_id]);
         //mensajes de error y exito.
         if($insert) {
-            $mensaje = "Se agregó el contacto".$name_contacts." ".$last_name_contacts. " correctamente";
+            $mensaje = "Se agregó el contacto ".$name_contacts." ".$last_name_contacts. " correctamente";
         } else {
             $error = "fallo la conexion y no se pudo crear el nuevo contacto";
         }
@@ -43,6 +44,19 @@ if (isset($_POST['crearContacto'])) {
     <div class="row">
         <div class="col-sm-6 offset-3">
         <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
+        <!-- mensaje -->
+        <?php if (isset($mensaje)) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><?php echo $mensaje;?></strong> 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php endif ?>
+        <!-- fin del mensaje -->
+        <!-- error --> 
+        <?php if (isset($error)) : ?>
+            <h6 class="bg-danger text-white"><?php echo $error; ?></h6>
+        <?php endif ?>
+        <!-- end error -->
             <div class="mb-3">
                 <label for="name_contacts" class="form-label">Nombre:</label>
                 <input type="text" class="form-control" name="name_contacts" id="name_contacts" placeholder="Ingresa el nombre">               

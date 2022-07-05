@@ -41,7 +41,7 @@ if (isset($_POST['borrarCategoria'])) {
         <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
             <div class="mb-3">
                 <label for="categories_name" class="form-label">Nombre:</label>
-                <input type="text" class="form-control" name="categories_name" id="categories_name" value=<?php echo $result_search->categories;?> readonly>               
+                <input type="text" class="form-control" name="categories_name" id="categories_name" value= "<?php echo $result_search->categories;?>"readonly>               
             </div>          
 
             <button type="submit" name="borrarCategoria" class="btn btn-primary w-100">Borrar Categoría</button>

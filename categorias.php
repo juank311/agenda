@@ -40,16 +40,17 @@ $categories_table = $stmt_search->fetchAll(PDO::FETCH_OBJ);
             <table id="tblCategorias" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>REF</th>
                         <th>Nombre</th>                
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
-                    <?php  foreach ($categories_table as $row) : ?>
+                        <?php  $contador = 0; ?>
+                    <?php  foreach ($categories_table as $row) : ?> 
+                        <?php $contador++; ?>
                     <tr>
-                        <td><?php echo $row->id; ?></td>
+                        <td><?php echo $contador; ?></td>
                         <td><?php echo $row->categories; ?></td>
                         <td>
                         <a href="editar_categoria.php?id=<?php echo $row->id; ?>" class="btn btn-warning"><i class="bi bi-pencil-fill"></i>Editar</a>

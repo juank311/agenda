@@ -22,8 +22,8 @@ if (isset($_POST['crearCategoria'])) {
         $stmt_insert = $pdo->prepare($query_insert);
         $stmt_insert->execute([$categories_name]);
         
-            $mensaje = "Categoria agregada exitosamente!!";
-
+            $mensaje = "Categoria <b><i>" . $categories_name . "</i></b> agregada exitosamente!!";
+            header('Location: categorias.php?mensaje=' .urldecode($mensaje));
     } else {
 
             $error = "La Categoria ".$categories_name. " ya se encuenta creada";
@@ -37,19 +37,7 @@ if (isset($_POST['crearCategoria'])) {
             <h3>Crear una Nueva Categoría</h3>
         </div>            
     </div>
-                    <?php if (isset($mensaje)) : ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong><?php echo $mensaje;?></strong> 
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php endif ?>
-                    <!-- error --> 
-                    <?php if (isset($error)) : ?>
-                        <h6 class="bg-danger text-white"><?php echo $error; ?></h6>
-                    <?php endif ?>
-                    <!-- end error -->
-
-    <div class="row">
+       <div class="row">
         <div class="col-sm-6 offset-3">
         <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
             <div class="mb-3">

@@ -2,19 +2,19 @@
 <?php
  //Se recibe el id y el nombre de la categoria que viene de del botn editar para el place holder
  if (isset($_GET['idp_contacts'])) {
-
+    //Recibe el ID de la categoria  y la prepara para ser usada
     $id_categories = $_GET['id_categories']; 
-    echo $id_categories;
-    $categories = $_GET['categories']; 
+    //echo $id_categories;
+    
     //Recibe el ID del contacto y la prepara para ser usada
     $id_contacts = $_GET['idp_contacts'];
-    echo $id_contacts;
-
-    //consulta para traer y mostrar los valores con relacion al id del usuario, para cuestion de placeholder
+    //echo $id_contacts;
+    echo "<br>";
+    //consulta para traer y mostrar los valores con relacion al id del usuario, para cuestion de placeholder editable
     $query_search = "SELECT * FROM agenda_s.contacts WHERE id = $id_contacts";
     $query_search = $pdo->query($query_search);
     $contact = $query_search->fetch();
-    var_dump($contact);
+    //var_dump($contact);
 
     //consulta para enviar los valores al select dinamico
     $query_search = "SELECT * FROM agenda_s.categories";
@@ -40,18 +40,18 @@ if (isset($_POST['editarContacto'])) {
         !isset($email_contacts) || trim($email_contacts == null) || trim($email_contacts == "") ||
         !isset($categories_id) || trim($categories_id == null) || trim($categories_id == "")) {
         $error = "Existe un campo vacio";
+
     } else {// Insert para agregar nuevo contacto a la base de datos. 
 
-        
-
-        $query_insert = "UPDATE  agenda_s.contacts SET name = ?, last_name = ?, phone = ?, email = ?, id_categories = ? ";
+        $query_insert = "UPDATE  agenda_s.contacts SET name = ?, last_name = ?, phone = ?, email = ?, id_categories = ? WHERE id = ? ";
         $stmt_insert = $pdo->prepare($query_insert);
-        $insert = $stmt_insert->execute([$name_contacts, $last_name_contacts, $phone_contacts, $email_contacts, $categories_id]);
+        $insert = $stmt_insert->execute([$name_contacts, $last_name_contacts, $phone_contacts, $email_contacts, $categories_id, $id_contacts]);
         //mensajes de error y exito.
         if($insert) {
-            $mensaje = "Se agregó el contacto ".$name_contacts." ".$last_name_contacts. " correctamente";
+            $mensaje = "Se modificó correctamente ".$name_contacts." ".$last_name_contacts;
+            header('Location: contactos.php?mensaje='.urlencode($mensaje));
         } else {
-            $error = "fallo la conexion y no se pudo crear el nuevo contacto";
+            $error = "fallo la conexion y no se pudo editar el contacto";
         }
     }
 }
@@ -63,14 +63,7 @@ if (isset($_POST['editarContacto'])) {
     </div>
     <div class="row">
         <div class="col-sm-6 offset-3">
-            <!-- mensaje -->
-        <?php if (isset($mensaje)) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong><?php echo $mensaje;?></strong> 
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <?php endif ?>
-        <!-- fin del mensaje -->
+            
         <!-- error --> 
         <?php if (isset($error)) : ?>
             <h6 class="bg-danger text-white"><?php echo $error; ?></h6>
@@ -98,9 +91,9 @@ if (isset($_POST['editarContacto'])) {
             <div class="mb-3">
                 <label for="email" class="form-label">Categoría:</label>
                 <select class="form-select" aria-label="Default select example" name="categories_id">
-                    <option value="<?php echo $id_categories?>"><?php echo $categories ?></option>
+                    <option value="">--Selecione una categoria--<?php // echo $categories ?></option>
                     <?php foreach ($categories_table as $row) : ?>
-                    <option value="<?php echo $row->id;?>"><?php echo $row->categories; ?></option>
+                    <option value="<?php echo $row->id;?>" <?php if ($id_categories == $row->id)echo'selected';?>> <?php echo $row->categories; ?></option>
                     <?php endforeach; ?>               
                 </select>
             </div>

@@ -29,7 +29,8 @@ if (isset($_POST['crearContacto'])) {
         $insert = $stmt_insert->execute([$name_contacts, $last_name_contacts, $phone_contacts, $email_contacts, $categories_id]);
         //mensajes de error y exito.
         if($insert) {
-            $mensaje = "Se agregó el contacto ".$name_contacts." ".$last_name_contacts. " correctamente";
+            $mensaje = "Se creó el contacto <b><i>".$name_contacts." ".$last_name_contacts. "</b></i> correctamente";
+            header('Location: contactos.php?mensaje=' . urldecode($mensaje));
         } else {
             $error = "fallo la conexion y no se pudo crear el nuevo contacto";
         }
